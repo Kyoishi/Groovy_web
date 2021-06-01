@@ -6,6 +6,7 @@ class Publisher(models.Model):
 
     class Meta:
         db_table = 'publisher'
+        verbose_name = verbose_name_plural = '出版社'
 
     name = models.CharField(verbose_name='出版社名', max_length=255)
 
@@ -34,9 +35,10 @@ class Book(models.Model):
         verbose_name = verbose_name_plural = '本'
 
     title = models.CharField(verbose_name='タイトル', max_length=255)
-    image = models.ImageField(verbose_name='画像', null=True, blank=True)
-    publisher = models.ForeignKey(Publisher, verbose_name='出版社', on_delete=models.PROTECT)
-    authors = models.ManyToManyField(Author, verbose_name='著者')
+    image = models.ImageField(verbose_name='画像', max_length=255, null=True, blank=True)
+    publisher = models.ForeignKey(Publisher, verbose_name='出版社',
+                                  on_delete=models.PROTECT, null=True, blank=True)
+    authors = models.ManyToManyField(Author, verbose_name='著者', blank=True)
     price = models.PositiveIntegerField(verbose_name='価格', null=True, blank=True, default=0)
     description = models.TextField(verbose_name='概要', null=True, blank=True)
     publish_date = models.DateField(verbose_name='出版日', null=True, blank=True)
