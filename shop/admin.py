@@ -8,7 +8,8 @@ class BookAdminForm(forms.ModelForm):
     def clean_title(self):
         value = self.cleaned_data['title']
         if 'Django' not in value:
-            raise forms.ValidationError("タイトルには「Django」という文字を含めてください")
+            raise forms.ValidationError(
+                "タイトルには「Django」という文字を含めてください")
         return value
 
 

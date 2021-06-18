@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block page_title %}商品リスト{% endblock %}
+
+{% block extra_css %}
+<style type="text/css">
+    .container > .grid {
+        height: 100%;
+    }
+
+    .table {
+        max-width: 400px;
+    }
+
+    .ui.grid > .column {
+        padding-top: 0.3em !important;
+        padding-bottom: 0.3em !important;
+    }
+
+    p.red.message {
+        color: #db2828;
+        margin: 0.8em 0 0 0.8em;
+        text-align: left;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<form method="get" action="{% url 'shop:index' %}" class="ui form">
+    <div class="ui stacked segment">
+        <div class="field">
+            <div class="ui input">
+                <input type="text" name="keyword" placeholder="キーワード" value="{{ keyword|default:'' }}">
+            </div>
+        </div>
+        <button type="submit" class="ui fluid teal submit button">検索</button>
+    </div>
+</form>
+
+<div class="ui four cards">
+{% load django_tables2 %}
+{% render_table table %}
+</div>
+{% endblock %}
