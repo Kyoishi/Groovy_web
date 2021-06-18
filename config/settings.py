@@ -40,8 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
 
     # 3rd party apps
+    # 'django_tables2',
+    'django_extensions',
 
     # My applications
+    'accounts.apps.AccountsConfig',
     'shop.apps.ShopConfig',
 ]
 
@@ -89,8 +92,16 @@ DATABASES = {
 }
 
 
-# Password validation
-# https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
+##################
+# Authentication #
+##################
+
+AUTH_USER_MODEL = 'accounts.CustomUser'
+
+
+#######################
+# Password validation #
+#######################
 
 AUTH_PASSWORD_VALIDATORS = [
     {
