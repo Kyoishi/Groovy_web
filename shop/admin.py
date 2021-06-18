@@ -14,11 +14,14 @@ class BookAdminForm(forms.ModelForm):
 
 
 class BookAdmin(admin.ModelAdmin):
-    # list_display = ('title', 'publisher', 'price')
-    # ordering = ('-price',)
-    # form = BookAdminForm
-    fields = ('title', 'price', 'created_at')
-    readonly_fields = ('created_at',)
+    # 一覧画面の表示フィールドを変更
+    list_display = ('title', 'publisher', 'price')
+    # 一覧画面のソート順を変更
+    ordering = ('-price',)
+    # 変更画面の表示フィールドを変更
+    fields = ('title', 'publisher', 'authors', 'price')
+    # フォームを入れ替える
+    form = BookAdminForm
 
 
 admin.site.register(Publisher)
