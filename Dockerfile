@@ -51,8 +51,8 @@ RUN apt update \
 WORKDIR /root/mysite
 
 # Install Python packages
-# COPY requirements/base.txt requirements/base.txt
-# RUN pip3 install -r requirements/base.txt
+COPY requirements/base.txt requirements/base.txt
+RUN pip3 install -r requirements/base.txt
 
 # Run entrypoint
 ENTRYPOINT ["/bin/bash", "scripts/init_mysite.sh"]
