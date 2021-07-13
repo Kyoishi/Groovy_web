@@ -1,0 +1,60 @@
+[
+  {
+    "model": "shop.publisher",
+    "fields": {
+      "id": 1,
+      "name": "自費出版社"
+    }
+  },
+  {
+    "model": "shop.author",
+    "fields": {
+      "id": 1,
+      "name": "akiyoko"
+    }
+  },
+  {
+    "model": "shop.book",
+    "fields": {
+      "id": 1,
+      "title": "Django本 その1",
+      "price": 1500,
+      "publish_date": "2018-08-21",
+      "publisher": "1",
+      "authors": "1"
+    }
+  },
+  {
+    "model": "shop.book",
+    "fields": {
+      "id": 2,
+      "title": "Django本 その2",
+      "price": 1600,
+      "publish_date": "2018-10-08",
+      "publisher": "1",
+      "authors": "1"
+    }
+  },
+  {
+    "model": "shop.book",
+    "fields": {
+      "id": 3,
+      "title": "Django本 その3",
+      "price": 1800,
+      "publish_date": "2019-09-22",
+      "publisher": "1",
+      "authors": "1"
+    }
+  },
+  {
+    "model": "shop.book",
+    "fields": {
+      "id": 4,
+      "title": "Django本 その4",
+      "price": 1200,
+      "publish_date": "2020-09-12",
+      "publisher": "1",
+      "authors": "1"
+    }
+  }
+]

@@ -55,6 +55,6 @@ COPY requirements/base.txt requirements/base.txt
 RUN pip3 install -r requirements/base.txt
 
 # Run entrypoint
-ENTRYPOINT ["/bin/bash", "scripts/init_mysite.sh"]
+ENTRYPOINT ["scripts/init_mysite.sh"]
 
 CMD ["/bin/bash"]
