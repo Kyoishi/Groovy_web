@@ -2,63 +2,65 @@
 {% load static %}
 <html lang="ja">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>{% block title %}{% endblock %}</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{% endblock %}</title>
+  {# --- css --- #}
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <style>
+      body {
+          display: flex;
+          padding-top: 40px;
+          padding-bottom: 40px;
+          background-color: #f5f5f5;
+      }
 
-    {# --- css --- #}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-    <style>
-        body {
-          font-family: "Helvetica Neue", Helvetica, Arial, "游ゴシック体", "Yu Gothic", YuGothic, "Hiragino Kaku Gothic ProN", Meiryo, 'Open Sans', sans-serif;
-          /* https://css-stripe-generator.firebaseapp.com/ */
-          background-size: auto auto;
-          background-color: rgba(255, 255, 255, 1);
-          background-image: repeating-linear-gradient(135deg, transparent, transparent 7px, rgba(245, 245, 245, 1) 7px, rgba(248, 248, 255, 1) 14px );
-        }
-
-        section#header {
-          height: 3.5em;
-        }
-
-        section#message {
-          margin-top: 1.5em;
-          margin-bottom: 1.5em;
-          width: 90%;
-          max-width: 800px;
-        }
-
-        section#main {
-          margin-bottom: 5em;
-          width: 90%;
-          max-width: 800px;
-          min-height: 600px;
-          background-color: #fff;
-        }
-        section#main main {
-          padding: 3em 2em 3em 2em;
-        }
-
-        section#footer footer {
-          background-color: #f2f2f2;
-        }
-    </style>
-    {% block extra_css %}{% endblock %}
+      /*
+      section#header {
+        height: 3.5em;
+      }
+      section#message {
+        margin-top: 1.5em;
+        margin-bottom: 1.5em;
+        width: 90%;
+        max-width: 800px;
+      }
+      section#main {
+        margin-bottom: 5em;
+        width: 90%;
+        max-width: 800px;
+        min-height: 600px;
+        background-color: #fff;
+      }
+      section#main main {
+        padding: 3em 2em 3em 2em;
+      }
+      section#footer footer {
+        background-color: #f2f2f2;
+      }
+      */
+  </style>
+  {% block extra_css %}{% endblock %}
 </head>
 <body>
-<div class="ui container">
-    {% include "_message.html" %}
-    {% block content %}{% endblock %}
-</div>
+{# --- メインエリア --- #}
+<main class="container">
+  {% include "_message.html" %}
+  {% block content %}{% endblock %}
+</main>
 
-{# TODO #}
-{% if user.is_authenticated %}
-<a href="{% url 'accounts:logout' %}">ログアウト</a> | <a href="{% url 'accounts:profile' %}">プロフィール</a> | <a href="{% url 'shop:index' %}">ショップ</a>
-{% endif %}
+<footer class="my-5 pt-5 text-muted text-center text-small">
+  {% if user.is_authenticated %}
+    <ul class="list-inline">
+      <li class="list-inline-item"><a href="{% url 'accounts:logout' %}">ログアウト</a></li>
+      <li class="list-inline-item"><a href="{% url 'accounts:profile' %}">プロフィール</a></li>
+      <li class="list-inline-item"><a href="{% url 'shop:index' %}">ショップ</a></li>
+    </ul>
+  {% endif %}
+</footer>
 
 {# --- js --- #}
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 {% block extra_js %}{% endblock %}
 </body>
 </html>
