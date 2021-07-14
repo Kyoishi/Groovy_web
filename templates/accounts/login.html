@@ -5,7 +5,7 @@
 
 {% block extra_css %}
   <style type="text/css">
-      .login.card {
+      main > section > .mx-auto {
           max-width: 400px;
       }
 
@@ -20,8 +20,8 @@
 
 {% block main %}
   <main>
-    <section class="container mb-4">
-      <div class="login card mx-auto text-center">
+    <section id="login-form" class="container mb-4">
+      <div class="card mx-auto text-center">
         <div class="card-body">
           <img src="{% static 'images/logo.png' %}" width="100">
         </div>
