@@ -1,17 +1,17 @@
-{% block messages %}
-{% for message in messages %}
-<div class="alert alert-{{ message.tags }}" role="alert">
-<span>{{ message }}</span>
-</div>
-{% endfor %}
+<section class="container my-4">
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}" role="alert">
+      <span>{{ message }}</span>
+    </div>
+  {% endfor %}
 
-{% comment %}
-{% if messages %}
-<div class="ui relaxed divided list">
-    {% for message in messages %}
-    <div class="ui {% if message.tags %}{{ message.tags }}{% endif %} message">{{ message }}</div>
-    {% endfor %}
-</div>
-{% endif %}
-{% endcomment %}
-{% endblock messages %}
+  {% if form.non_field_errors %}
+    <div class="alert alert-danger alert-dismissable" role="alert">
+      <ul class="list-unstyled mb-0">
+        {% for error in form.non_field_errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+</section>

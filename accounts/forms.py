@@ -1,9 +1,10 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import AuthenticationForm, UsernameField
-from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.forms import UsernameField
 
 from .models import CustomUser
+
+User = get_user_model()
 
 
 class RegisterForm(forms.ModelForm):
@@ -68,13 +69,14 @@ class LoginForm(forms.Form):
 
     password = forms.CharField(
         label='パスワード',
-        strip=False,
-        widget=forms.PasswordInput(attrs={'placeholder': 'パスワード'}, render_value=True),
+        widget=forms.PasswordInput(attrs={'placeholder': 'パスワード'}),
     )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.user_cache = None
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
 
     def clean_password(self):
         value = self.cleaned_data['password']
@@ -84,15 +86,16 @@ class LoginForm(forms.Form):
         value = self.cleaned_data['username']
         if len(value) < 3:
             raise forms.ValidationError(
-                '%(min_length)s文字以上で入力してください', params={'min_length': 3})
+                '%(min_length)s文字以上で入力してください',
+                code='invalid', params={'min_length': 3})
         return value
 
     def clean(self):
         username = self.cleaned_data.get('username')
         password = self.cleaned_data.get('password')
         try:
-            user = get_user_model().objects.get(username=username)
-        except ObjectDoesNotExist:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
             raise forms.ValidationError("正しいユーザー名を入力してください")
         # パスワードはハッシュ化されて保存されているので平文での検索はできない
         if not user.check_password(password):
@@ -105,6 +108,8 @@ class LoginForm(forms.Form):
 
 
 class ProfileForm(forms.ModelForm):
+    """プロフィール登録画面用のフォーム"""
+
     class Meta:
         model = CustomUser
         fields = ('username', 'email', 'last_name', 'first_name',)

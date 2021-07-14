@@ -19,7 +19,7 @@ class BookAdmin(admin.ModelAdmin):
     # 一覧画面のソート順を変更
     ordering = ('-price',)
     # 変更画面の表示フィールドを変更
-    fields = ('title', 'publisher', 'authors', 'price')
+    # fields = ('title', 'publisher', 'authors', 'price')
     # フォームを入れ替える
     form = BookAdminForm
 
