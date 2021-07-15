@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load static %}
-{% load humanize %}
 
 {% block title %}商品リスト{% endblock %}
 
@@ -37,7 +36,7 @@
                   </li>
                   <li class="list-group-item">
                     <label class="badge bg-light text-dark">価　格</label>
-                    <small>{{ book.price|default_if_none:0|intcomma }}円</small>
+                    <small>{{ book.price|default_if_none:0|floatformat:"g" }}円</small>
                   </li>
                   <li class="list-group-item">
                     <label class="badge bg-light text-dark">出版社</label>
