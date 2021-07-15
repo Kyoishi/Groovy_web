@@ -22,15 +22,17 @@
         {% for book in book_list %}
           <div class="col">
             <div class="card h-100 mb-4">
-              {% if book.image %}
-                <a href="{% url 'shop:detail' book.id %}">
-                  <img src="{{ book.image.url }}" class="card-img-top">
-                </a>
-              {% else %}
-                <a href="{% url 'shop:detail' book.id %}">
-                  <img src="{% static 'shop/images/no-image.png' %}" class="card-img-top">
-                </a>
-              {% endif %}
+              <div class="p-3">
+                {% if book.image %}
+                  <a href="{% url 'shop:detail' book.id %}">
+                    <img src="{{ book.image.url }}" class="card-img-top">
+                  </a>
+                {% else %}
+                  <a href="{% url 'shop:detail' book.id %}">
+                    <img src="{% static 'shop/images/no-image.png' %}" class="card-img-top">
+                  </a>
+                {% endif %}
+              </div>
               <div class="card-body">
                 <h5 class="card-title">
                   <a href="{% url 'shop:detail' book.id %}" class="text-decoration-none">{{ book.title }}</a>
