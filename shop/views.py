@@ -1,13 +1,14 @@
 import logging
+import time
+
 import stripe
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.admin.models import ADDITION, LogEntry
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
-from django.shortcuts import get_object_or_404, render
-from django.utils.encoding import force_text
+from django.shortcuts import get_object_or_404
+from django.template.response import TemplateResponse
+from django.urls import reverse
 from django.views.generic import View
 
 from .models import Book
@@ -15,12 +16,17 @@ from .models import Book
 logger = logging.getLogger(__name__)
 
 
-class IndexView(LoginRequiredMixin, View):
+class IndexView(View):
+    # class IndexView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
+        start_time = time.time()
+        logger.info(f"User({request.user.id}) posted.")
         queryset = Book.objects.select_related('publisher').prefetch_related(
             'authors').order_by('publish_date')
         keyword = request.GET.get('keyword')
         if keyword:
+            # TODO
+            messages.info(request, "TODO")
             queryset = queryset.filter(
                 Q(title__icontains=keyword) | Q(description__icontains=keyword)
             )
@@ -28,7 +34,8 @@ class IndexView(LoginRequiredMixin, View):
             'keyword': keyword,
             'book_list': queryset,
         }
-        return render(request, 'shop/book_list.html', context)
+        logger.debug(f"Finished in {time.time() - start_time:.2f} sec.")
+        return TemplateResponse(request, 'shop/book_list.html', context)
 
 
 index = IndexView.as_view()
@@ -36,54 +43,37 @@ index = IndexView.as_view()
 
 class DetailView(LoginRequiredMixin, View):
     def get(self, request, book_id, *args, **kwargs):
-        book = Book.objects.get(pk=book_id)
+        book = get_object_or_404(Book, pk=book_id)
+
+        stripe.api_key = settings.STRIPE_API_KEY
+        session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[{
+                'price_data': {
+                    'product': 'prod_JrHxyqQP0vTHeR',
+                    'unit_amount': book.price,
+                    'currency': 'jpy',
+                },
+                'quantity': 1,
+            }],
+            mode='payment',
+            success_url=request.build_absolute_uri(reverse('shop:complete')),
+            cancel_url=request.build_absolute_uri(reverse('shop:detail', args=(book_id,))),
+        )
         context = {
             'book': book,
-            'stripe_pub_key': settings.STRIPE_PUBLISHABLE_KEY,
+            'checkout_session_id': session.id,
+            'stripe_pub_key': settings.STRIPE_PUB_KEY,
         }
-        LogEntry.objects.log_action(
-            user_id=request.user.pk,
-            content_type_id=ContentType.objects.get_for_model(book).pk,
-            object_id=book.pk,
-            object_repr=force_text(book),
-            action_flag=ADDITION,
-        )
-        return render(request, 'shop/book_detail.html', context)
+        return TemplateResponse(request, 'shop/book_detail.html', context)
 
 
 detail = DetailView.as_view()
 
 
-class CheckoutView(LoginRequiredMixin, View):
-    def post(self, request, *args, **kwargs):
-        import time
-        start_time = time.time()
-        logger.info("User({}) posted the form.".format(request.user.id))
-
-        stripe.api_key = settings.STRIPE_API_KEY
-        token = request.POST['stripeToken']
-        item_id = request.POST['item_id']
-        book = get_object_or_404(Book, pk=item_id)
-
-        try:
-            charge = stripe.Charge.create(
-                amount=book.price,
-                currency='jpy',
-                source=token,
-                description=book.title,
-            )
-        except stripe.error.CardError as e:
-            # The card has been declined
-            return render(request, 'error.html', {
-                'message': "Your payment cannot be completed. The card has been declined.",
-            })
-
-        logger.info("Charge[{}] created successfully.".format(charge.id))
-        messages.info(request, "Your payment has been completed successfully.")
-        logger.debug("Finished in {:.2f} secs.".format(time.time() - start_time))
-        return render(request, 'shop/complete.html', {
-            'charge': charge,
-        })
+class CompleteView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        return TemplateResponse(request, 'shop/book_detail.html')
 
 
-checkout = CheckoutView.as_view()
+complete = CompleteView.as_view()

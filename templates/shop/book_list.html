@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 
+{# -- タイトル -- #}
 {% block title %}商品リスト{% endblock %}
 
+{# -- メインコンテンツ -- #}
 {% block main %}
   <main>
     <section id="book-search" class="container mb-4">
@@ -19,11 +21,15 @@
       <div class="row row-cols-1 row-cols-md-4 g-3">
         {% for book in book_list %}
           <div class="col">
-            <div class="card mb-4">
+            <div class="card h-100 mb-4">
               {% if book.image %}
-                <img src="{{ book.image.url }}" class="card-img-top">
+                <a href="{% url 'shop:detail' book.id %}">
+                  <img src="{{ book.image.url }}" class="card-img-top">
+                </a>
               {% else %}
-                <img src="{% static 'shop/images/no-image.png' %}" class="card-img-top">
+                <a href="{% url 'shop:detail' book.id %}">
+                  <img src="{% static 'shop/images/no-image.png' %}" class="card-img-top">
+                </a>
               {% endif %}
               <div class="card-body">
                 <h5 class="card-title">

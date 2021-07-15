@@ -248,3 +248,6 @@ LOGGING = {
         # },
     },
 }
+
+STRIPE_API_KEY = '<stripe-api-key>'
+STRIPE_PUB_KEY = '<stripe-publishable-key>'

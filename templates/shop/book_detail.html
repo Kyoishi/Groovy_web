@@ -1,31 +1,92 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block page_title %}商品リスト{% endblock %}
+{# -- タイトル -- #}
+{% block title %}商品リスト{% endblock %}
 
+{# -- CSS -- #}
 {% block extra_css %}
-<style type="text/css">
-</style>
+  <style type="text/css">
+      main > section > .mx-auto {
+          max-width: 720px;
+      }
+  </style>
 {% endblock %}
 
-{% block content %}
-商品詳細
-<br>
-<br>
-<form action="{% url 'shop:checkout' %}" method="post">
-    <script
-            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-            data-key="{{ stripe_pub_key }}"
-            data-label="クレジットカードで支払う"
-            data-name="クレジットカード支払い"
-            data-description="{{ book.title }}"
-            data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-            data-amount="{{ book.price }}"
-            data-currency="jpy"
-            data-locale="auto">
-    </script>
-    <input type="hidden" name="item_id" value="{{ book.id }}">
-    {% csrf_token %}
-</form>
+{# -- JavaScript -- #}
+{% block extra_js %}
+  <script src="https://js.stripe.com/v3"></script>
+  <script>
+      var stripe = Stripe("{{ stripe_pub_key }}");
+      var checkoutButton = document.getElementById("checkout-button");
 
+      checkoutButton.addEventListener("click", function () {
+          stripe.redirectToCheckout({
+              sessionId: "{{ checkout_session_id }}"
+          }).then(function (result) {
+              console.log("result", result);
+              if (result.error) {
+                  var displayError = document.getElementById("message");
+                  displayError.textContent = result.error.message;
+              }
+          });
+      });
+  </script>
+{% endblock %}
+
+{# -- メインコンテンツ -- #}
+{% block main %}
+  <main>
+    <section id="book-detail" class="container">
+      <div class="card mx-auto">
+        <div class="row justify-content-center">
+          <div class="col-md-5">
+            <div class="py-4">
+              {% if book.image %}
+                <img src="{{ book.image.url }}" class="card-img-top">
+              {% else %}
+                <img src="{% static 'shop/images/no-image.png' %}" class="card-img-top">
+              {% endif %}
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="py-4">
+              <div class="card-body">
+                <h5 class="card-title">
+                  {{ book.title }}
+                </h5>
+              </div>
+              <div class="card-body">
+                <ul class="list-group list-group-flush mb-3">
+                  <li class="list-group-item">
+                    <label class="badge bg-light text-dark">著　者</label>
+                    <small>{{ book.authors.all.0 }}{% if book.authors.all.1 %} 他{% endif %}</small>
+                  </li>
+                  <li class="list-group-item">
+                    <label class="badge bg-light text-dark">価　格</label>
+                    <small>{{ book.price|default_if_none:0|floatformat:"g" }}円</small>
+                  </li>
+                  <li class="list-group-item">
+                    <label class="badge bg-light text-dark">出版社</label>
+                    <small>{{ book.publisher }}</small>
+                  </li>
+                  <li class="list-group-item">
+                    <label class="badge bg-light text-dark">出版日</label>
+                    <small>{{ book.publish_date|date:"Y年m月d日" }}</small>
+                  </li>
+                  <li class="list-group-item">
+                    <div><label class="badge bg-light text-dark mb-2">詳　細</label></div>
+                    <small>{{ book.description|default:""|linebreaksbr }}</small>
+                  </li>
+                </ul>
+              </div>
+              <div class="card-body">
+                <button id="checkout-button" type="button" class="btn btn-success">購入する</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 {% endblock %}
