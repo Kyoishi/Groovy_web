@@ -250,6 +250,6 @@ LOGGING = {
 }
 
 # Stripe 公開可能キー
-STRIPE_PUB_KEY = '<stripe-publishable-key>'
+STRIPE_PUBLISHABLE_KEY = '<stripe-publishable-key>'
 # Stripe シークレットキー
-STRIPE_API_KEY = '<stripe-api-secret-key>'
+STRIPE_SECRET_KEY = '<stripe-api-secret-key>'

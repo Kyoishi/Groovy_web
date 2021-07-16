@@ -14,7 +14,7 @@ from django.views.generic import View
 
 from .models import Book
 
-stripe.api_key = settings.STRIPE_API_KEY
+stripe.api_key = settings.STRIPE_SECRET_KEY
 logger = logging.getLogger(__name__)
 
 
@@ -62,7 +62,7 @@ class DetailView(LoginRequiredMixin, View):
         # )
         context = {
             'book': book,
-            'stripe_pub_key': settings.STRIPE_PUB_KEY,
+            'stripe_publishable_key': settings.STRIPE_PUBLISHABLE_KEY,
             # 'checkout_session_id': session.id,
         }
         return TemplateResponse(request, 'shop/book_detail.html', context)

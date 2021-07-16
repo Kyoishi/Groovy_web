@@ -90,7 +90,7 @@
   <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc"></script>
   <script>
-      var stripe = Stripe("{{ stripe_pub_key }}");
+      var stripe = Stripe("{{ stripe_publishable_key }}");
 
       // The items the customer wants to buy
       var purchase = {
