@@ -1,6 +1,6 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.signals import user_logged_in
+# from django.contrib.auth.signals import user_logged_in
+from django.db import models
 
 
 class CustomUser(AbstractUser):
@@ -11,14 +11,14 @@ class CustomUser(AbstractUser):
         verbose_name = verbose_name_plural = 'カスタムユーザー'
 
     login_count = models.IntegerField(verbose_name='ログイン回数', default=0)
-    profile_image = models.ImageField(verbose_name='プロフィール画像', null=True, blank=True)
+    profile_image = models.ImageField(verbose_name='プロフィール画像',
+                                      null=True, blank=True)
 
     def post_login(self):
         """ログイン後処理"""
         # ログイン回数を増やす
         self.login_count += 1
         self.save()
-
 
 # def update_login_count(sender, user, **kwargs):
 #     """
