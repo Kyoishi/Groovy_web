@@ -110,9 +110,17 @@ class LoginForm(forms.Form):
         return self.user_cache
 
 
-class ProfileForm(forms.ModelForm):
-    """プロフィール登録画面用のフォーム"""
+class ProfileChangeForm(forms.ModelForm):
+    """プロフィール変更画面用のフォーム"""
 
     class Meta:
         model = CustomUser
-        fields = ('profile_image',)
+        fields = ('email', 'profile_image',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # フィールドの属性を書き換え
+        self.fields['email'].required = True
+        self.fields['email'].widget.attrs = {'placeholder': 'メールアドレス'}
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'

@@ -2,16 +2,18 @@ import logging
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import login as auth_login, logout as auth_logout
+from django.contrib.auth import get_user_model, login as auth_login, logout as auth_logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http.response import HttpResponseRedirect
 from django.template.response import TemplateResponse
 # from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
+from django.views.generic import UpdateView
 
-from .forms import LoginForm, ProfileForm, RegisterForm
+from .forms import LoginForm, ProfileChangeForm, RegisterForm
 
+User = get_user_model()
 logger = logging.getLogger(__name__)
 
 
@@ -113,31 +115,42 @@ class LogoutView(View):
 logout = LogoutView.as_view()
 
 
-class ProfileView(LoginRequiredMixin, View):
-    def get(self, request, *args, **kwargs):
-        form = ProfileForm(None, instance=request.user)
-        context = {
-            'form': form,
-        }
-        return TemplateResponse(request, 'accounts/profile.html', context)
+class ProfileChangeView(LoginRequiredMixin, UpdateView):
+    form_class = ProfileChangeForm
+    template_name = 'accounts/profile_change.html'
+    success_url = '/accounts/profile_change/'
 
-    def post(self, request, *args, **kwargs):
-        logger.info("You're in post!!!")
+    def get_object(self, queryset=None):
+        return self.request.user
 
-        # フォームを使ってバリデーション
-        form = ProfileForm(request.POST, request.FILES, instance=request.user)
-        if not form.is_valid():
-            context = {
-                'form': form,
-            }
-            return TemplateResponse(request, 'accounts/profile.html', context)
-
-        # 変更を保存
-        form.save()
-
+    def form_valid(self, form):
+        response = super().form_valid(form)
         # フラッシュメッセージを画面に表示
-        messages.info(request, "プロフィール画像を変更しました。")
-        return HttpResponseRedirect('/accounts/profile/')
+        messages.info(self.request, "プロフィールを変更しました。")
+        return response
 
 
-profile = ProfileView.as_view()
+# class ProfileChangeView(LoginRequiredMixin, View):
+#     def get(self, request, *args, **kwargs):
+#         form = ProfileChangeForm(None, instance=request.user)
+#         context = {
+#             'form': form,
+#         }
+#         return TemplateResponse(request, 'accounts/profile_change.html', context)
+#
+#     def post(self, request, *args, **kwargs):
+#         # フォームを使ってバリデーション
+#         form = ProfileChangeForm(request.POST, request.FILES, instance=request.user)
+#         if not form.is_valid():
+#             context = {
+#                 'form': form,
+#             }
+#             return TemplateResponse(request, 'accounts/profile_change.html', context)
+#         # 変更を保存
+#         form.save()
+#         # フラッシュメッセージを画面に表示
+#         messages.info(request, "プロフィール画像を変更しました。")
+#         return HttpResponseRedirect('/accounts/profile/')
+
+
+profile_change = ProfileChangeView.as_view()
