@@ -10,6 +10,7 @@
       main > section > .mx-auto {
           max-width: 400px;
       }
+
       .profile {
           width: 150px;
           height: 150px;
@@ -31,6 +32,11 @@
           {% else %}
             <img src="{% static 'accounts/images/no-image.png' %}" class="rounded-circle border profile">
           {% endif %}
+        </div>
+        <div class="card-body">
+          <div>
+            <small>縦横比が等しい画像をアップロードしてください。</small>
+          </div>
           <form action="" method="post" enctype="multipart/form-data" class="row m-3 g-3" novalidate>
             <div>
               <input type="file" name="profile_image" id="id_profile_image"
