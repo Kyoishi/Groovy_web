@@ -249,5 +249,7 @@ LOGGING = {
     },
 }
 
-STRIPE_API_KEY = '<stripe-api-key>'
+# Stripe 公開可能キー
 STRIPE_PUB_KEY = '<stripe-publishable-key>'
+# Stripe シークレットキー
+STRIPE_API_KEY = '<stripe-api-secret-key>'
