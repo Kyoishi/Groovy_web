@@ -1,4 +1,5 @@
 import logging
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login as auth_login, logout as auth_logout
@@ -124,15 +125,18 @@ class ProfileView(LoginRequiredMixin, View):
         logger.info("You're in post!!!")
 
         # フォームを使ってバリデーション
-        form = ProfileForm(request.POST, instance=request.user)
+        form = ProfileForm(request.POST, request.FILES, instance=request.user)
         if not form.is_valid():
-            return TemplateResponse(request, 'accounts/profile.html', {'form': form})
+            context = {
+                'form': form,
+            }
+            return TemplateResponse(request, 'accounts/profile.html', context)
 
         # 変更を保存
         form.save()
 
         # フラッシュメッセージを画面に表示
-        messages.info(request, "プロフィールを更新しました。")
+        messages.info(request, "プロフィール画像を変更しました。")
         return HttpResponseRedirect('/accounts/profile/')
 
 

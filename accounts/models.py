@@ -8,8 +8,10 @@ class CustomUser(AbstractUser):
 
     class Meta(object):
         db_table = 'custom_user'
+        verbose_name = verbose_name_plural = 'カスタムユーザー'
 
     login_count = models.IntegerField(verbose_name='ログイン回数', default=0)
+    profile_image = models.ImageField(verbose_name='プロフィール画像', null=True, blank=True)
 
     def post_login(self):
         """ログイン後処理"""

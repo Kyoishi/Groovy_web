@@ -33,6 +33,8 @@ class RegisterForm(forms.ModelForm):
         # フィールドの属性を書き換え
         self.fields['email'].required = True
         self.fields['email'].widget.attrs = {'placeholder': 'メールアドレス'}
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
 
     def clean_username(self):
         value = self.cleaned_data['username']
@@ -75,6 +77,7 @@ class LoginForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.user_cache = None
+        # フィールドの属性を書き換え
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
 
@@ -112,21 +115,4 @@ class ProfileForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'last_name', 'first_name',)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['username'].widget.attrs = {'placeholder': 'ユーザー名'}
-        self.fields['email'].required = True
-        self.fields['email'].widget.attrs = {'placeholder': 'メールアドレス'}
-        # self.fields['password'].widget = forms.PasswordInput(attrs={'placeholder': 'パスワード'}, render_value=True)
-        self.fields['last_name'].widget.attrs = {'placeholder': '苗字'}
-        self.fields['first_name'].widget.attrs = {'placeholder': '名前'}
-
-    def clean_username(self):
-        value = self.cleaned_data['username']
-        return value
-
-    def clean_email(self):
-        value = self.cleaned_data['email']
-        return value
+        fields = ('profile_image',)
