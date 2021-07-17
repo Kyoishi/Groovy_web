@@ -108,6 +108,8 @@ DATABASES = {
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
+LOGIN_REDIRECT_URL = '/shop/'
+
 
 #######################
 # Password validation #
