@@ -45,3 +45,14 @@ class Book(models.Model):
 
     def __str__(self):
         return self.title
+
+
+# class BookStock(models.Model):
+#     """本の在庫モデル"""
+#     class Meta:
+#         db_table = 'book_stock'
+#         verbose_name = verbose_name_plural = '本の在庫'
+#
+#     book = models.OneToOneField(Book, verbose_name='本',
+#                                 on_delete=models.CASCADE)
+#     quantity = models.IntegerField(verbose_name='在庫数', default=0)
