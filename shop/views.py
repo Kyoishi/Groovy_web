@@ -88,6 +88,43 @@ class CreatePaymentAjaxView(LoginRequiredMixin, View):
 
 payment = CreatePaymentAjaxView.as_view()
 
+class RegisterView(View):
+    def get(self, request, *args, **kwargs):
+        # 修正の必要あり
+        # if request.user.is_authenticated:
+        #    return HttpResponseRedirect(reverse('shop:index'))
+
+        # context = {
+        #     'form': RegisterForm(),
+        # }
+        return TemplateResponse(request, 'shop/register.html')
+
+    """
+    def post(self, request, *args, **kwargs):
+        logger.info("You're in post!!!")
+
+        # リクエストからフォームを作成
+        form = RegisterForm(request.POST)
+        # バリデーション
+        if not form.is_valid():
+            # バリデーションNGの場合はアカウント登録画面のテンプレートを再表示
+            return TemplateResponse(request, 'shop/register.html', {'form': form})
+
+        # 保存する前に一旦取り出す
+        user = form.save(commit=False)
+        # パスワードをハッシュ化してセット
+        user.set_password(form.cleaned_data['password'])
+        # ユーザーオブジェクトを保存
+        user.save()
+
+        # ログイン処理（取得した Userオブジェクトをセッションに保存 & Userデータを更新）
+        auth_login(request, user)
+
+        return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
+    """
+
+register = RegisterView.as_view()
+
 # class CompleteView(LoginRequiredMixin, View):
 #     def get(self, request, *args, **kwargs):
 #         return TemplateResponse(request, 'shop/book_detail.html')

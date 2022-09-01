@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
 
-{# -- タイトル -- #}
-{% block title %}商品リスト{% endblock %}
+{# -- Title -- #}
+{% block title %}Product List{% endblock %}
 
 {# -- CSS -- #}
 {% block extra_css %}
@@ -14,7 +14,7 @@
   </style>
 {% endblock %}
 
-{# -- メインコンテンツ -- #}
+{# -- Main Content -- #}
 {% block main %}
   <main>
     <section id="book-detail" class="container">
@@ -39,23 +39,23 @@
               <div class="card-body">
                 <ul class="list-group list-group-flush">
                   <li class="list-group-item">
-                    <label class="badge bg-light text-dark">著　者</label>
+                    <label class="badge bg-light text-dark">Author</label>
                     <small>{{ book.authors.all.0 }}{% if book.authors.all.1 %} 他{% endif %}</small>
                   </li>
                   <li class="list-group-item">
-                    <label class="badge bg-light text-dark">価　格</label>
+                    <label class="badge bg-light text-dark">Price</label>
                     <small>{{ book.price|default_if_none:0|floatformat:"g" }}円</small>
                   </li>
                   <li class="list-group-item">
-                    <label class="badge bg-light text-dark">出版社</label>
+                    <label class="badge bg-light text-dark">Publisher</label>
                     <small>{{ book.publisher }}</small>
                   </li>
                   <li class="list-group-item">
-                    <label class="badge bg-light text-dark">出版日</label>
+                    <label class="badge bg-light text-dark">Publish Date</label>
                     <small>{{ book.publish_date|date:"Y年m月d日" }}</small>
                   </li>
                   <li class="list-group-item">
-                    <div><label class="badge bg-light text-dark mb-2">詳　細</label></div>
+                    <div><label class="badge bg-light text-dark mb-2">Detail</label></div>
                     <small>{{ book.description|default:""|linebreaksbr }}</small>
                   </li>
                 </ul>
@@ -69,7 +69,7 @@
               <div id="card-element"><!--Stripe.js injects the Card Element--></div>
               <button id="submit">
                 <div class="spinner hidden" id="spinner"></div>
-                <span id="button-text">購入する</span>
+                <span id="button-text">Purchase</span>
               </button>
               <p id="card-error" role="alert"></p>
               <p class="result-message hidden">
