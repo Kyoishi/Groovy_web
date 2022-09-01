@@ -13,6 +13,7 @@ from django.template.response import TemplateResponse
 from django.views.generic import View
 
 from .models import Book
+from .forms import RegisterForm
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 logger = logging.getLogger(__name__)
@@ -94,12 +95,11 @@ class RegisterView(View):
         # if request.user.is_authenticated:
         #    return HttpResponseRedirect(reverse('shop:index'))
 
-        # context = {
-        #     'form': RegisterForm(),
-        # }
-        return TemplateResponse(request, 'shop/register.html')
+        context = {
+             'form': RegisterForm(),
+        }
+        return TemplateResponse(request, 'shop/register.html', context)
 
-    """
     def post(self, request, *args, **kwargs):
         logger.info("You're in post!!!")
 
@@ -111,17 +111,15 @@ class RegisterView(View):
             return TemplateResponse(request, 'shop/register.html', {'form': form})
 
         # 保存する前に一旦取り出す
-        user = form.save(commit=False)
-        # パスワードをハッシュ化してセット
-        user.set_password(form.cleaned_data['password'])
+        book = form.save(commit=False)
+
         # ユーザーオブジェクトを保存
-        user.save()
+        book.save()
 
         # ログイン処理（取得した Userオブジェクトをセッションに保存 & Userデータを更新）
-        auth_login(request, user)
+        # auth_login(request, user)
 
-        return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
-    """
+        # return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
 
 register = RegisterView.as_view()
 
