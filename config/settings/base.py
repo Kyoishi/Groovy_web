@@ -142,6 +142,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 ###################
 
 # Stripe 公開可能キー
-STRIPE_PUBLISHABLE_KEY = '<stripe-publishable-key>'
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51LeDc9HkASqHkO8BJlgtcIUUq65x0ofpNYeMo1AItbwM9oJL9qxvlNtPvdmWoXzPNFWMn0koieNXlyOvr2nwqvlZ00h7tTleLE'
 # Stripe シークレットキー
-STRIPE_SECRET_KEY = '<stripe-api-secret-key>'
+STRIPE_SECRET_KEY = 'sk_test_51LeDc9HkASqHkO8BRl7fpNfuJGWFXqgs5nXzKzXynXoSbyYnURrYniVTQNvB6CELZc9VVzHMrvU7VBoRUfzMiIia00WSoFdkfD'

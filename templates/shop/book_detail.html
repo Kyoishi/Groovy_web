@@ -58,6 +58,10 @@
                     <div><label class="badge bg-light text-dark mb-2">Detail</label></div>
                     <small>{{ book.description|default:""|linebreaksbr }}</small>
                   </li>
+                  <li class="list-group-item">
+                    <div><label class="badge bg-light text-dark mb-2">Update</label></div>
+                    <small><p><a class='btn btn-primary' href="{% url 'shop:update' pk=book.pk %}">Update</a></p></small>
+                  </li>
                 </ul>
               </div>
             </div>

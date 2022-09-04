@@ -11,9 +11,12 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 # from django.urls import reverse
 from django.views.generic import View
+from django.views.generic.edit import UpdateView
 
 from .models import Book
 from .forms import RegisterForm
+from django.urls import reverse
+from django.urls import reverse_lazy
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 logger = logging.getLogger(__name__)
@@ -126,16 +129,23 @@ class RegisterView(View):
 
 register = RegisterView.as_view()
 
-def member_edit(request, member_id):
-    member = get_object_or_404(Member, pk=member_id)
-    if request.method == "POST":
-        form = MemberForm(request.POST, instance=member)
-        if form.is_valid():
-            form.save()
-            return redirect('member_detail', member_id=member_id)
-    else:
-        form = MemberForm(instance=member)
-    return render(request, 'five/member_edit.html', {'form': form})
+#Upadate画面(会社情報)
+class BookUpdateView(UpdateView):
+    # https://man.plustar.jp/django/ref/class-based-views/generic-editing.html#django.views.generic.edit.CreateView
+    #入力項目定義
+    fields = ('title', 'image', 'publisher', 'authors', 'price', 'description', 'publish_date')
+    #Companyテーブル連携
+    model = Book
+    #テンプレートファイル連携
+    template_name_suffix = "_update"
+
+    # reference: https://btj0.com/blog/django/success_url-get_success_url-reverse-reverse_lazy/
+    success_url = reverse_lazy('shop:index')
+
+
+    #更新後のリダイレクト先
+    #def post(self, request, *args, **kwargs):
+    #    return TemplateResponse(request,'shop/book_list.html')
 
 # class CompleteView(LoginRequiredMixin, View):
 #     def get(self, request, *args, **kwargs):
