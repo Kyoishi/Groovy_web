@@ -2,7 +2,7 @@
 {% load static %}
 
 {# -- タイトル -- #}
-{% block title %}新規ユーザー登録{% endblock %}
+{% block title %}Register Product{% endblock %}
 
 {# -- CSS -- #}
 {% block extra_css %}
@@ -30,7 +30,8 @@
         </div>
         <div class="card-body">
           <h1 class="h3 mb-3">Register</h1>
-          <form action="" method="post" class="row m-3 g-3" novalidate>
+          <form action="" method="post" enctype="multipart/form-data" class="row m-3 g-3" novalidate>
+            <!-- reference: https://office54.net/python/django/image-file-upload -->
             {% for field in form %}
               <div>
                 {# -- 入力項目 -- #}
@@ -54,6 +55,7 @@
             {% endcomment %}
 
             <button class="btn btn-lg btn-primary" type="submit">Register</button>
+
             {% csrf_token %}
           </form>
         </div>

@@ -104,24 +104,38 @@ class RegisterView(View):
         logger.info("You're in post!!!")
 
         # リクエストからフォームを作成
-        form = RegisterForm(request.POST)
+        form = RegisterForm(request.POST, request.FILES)
+        
         # バリデーション
         if not form.is_valid():
             # バリデーションNGの場合はアカウント登録画面のテンプレートを再表示
             return TemplateResponse(request, 'shop/register.html', {'form': form})
 
         # 保存する前に一旦取り出す
-        book = form.save(commit=False)
+        book = form.save()
+        #(commit=False)
 
-        # ユーザーオブジェクトを保存
+        # bookオブジェクトを保存
         book.save()
 
         # ログイン処理（取得した Userオブジェクトをセッションに保存 & Userデータを更新）
         # auth_login(request, user)
 
-        # return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
+        # need to revise here
+        return TemplateResponse(request, 'shop/book_list.html')
 
 register = RegisterView.as_view()
+
+def member_edit(request, member_id):
+    member = get_object_or_404(Member, pk=member_id)
+    if request.method == "POST":
+        form = MemberForm(request.POST, instance=member)
+        if form.is_valid():
+            form.save()
+            return redirect('member_detail', member_id=member_id)
+    else:
+        form = MemberForm(instance=member)
+    return render(request, 'five/member_edit.html', {'form': form})
 
 # class CompleteView(LoginRequiredMixin, View):
 #     def get(self, request, *args, **kwargs):
